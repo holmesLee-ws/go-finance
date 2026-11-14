@@ -1,6 +1,16 @@
 # 근거 목록
 
-지도(`map.md`)의 「국내 근거」·「글로벌 비교」 id가 가리키는 공식 출처다. 항목마다 정식 명칭, 실제로 읽은 공식 URL, 조회일, 그때 확인한 조문·수치가 있다. 「변동」 줄이 있는 항목은 자주 바뀌므로 세션에서 학습자에게 말하기 전에 다시 확인한다([tutor/law-and-sources.md](../tutor/law-and-sources.md)).
+지도(`map.md`)의 「국내 근거」·「글로벌 비교」 id가 가리키는 공식 출처다. 항목마다 정식 명칭, 실제로 읽은 공식 URL, 조회일, 그때 확인한 조문·수치가 있다. 이 목록은 어디를 열지 알려 주는 지도다. 튜터는 조문 번호·수치를 학습자에게 말하기 전에 **항상** 그 출처를 세션 중에 다시 연다([tutor/law-and-sources.md](../tutor/law-and-sources.md)). 「변동」 줄은 특히 자주 바뀌는 값이다.
+
+## 허용 도메인
+
+출처 줄의 URL은 아래 도메인(과 그 하위 도메인)만 쓴다. 이 목록 밖의 페이지는 공식 주소를 찾는 실마리로만 쓴다.
+
+- 국내 법령·감독·발행 기관: `law.go.kr` `fsc.go.kr` `fss.or.kr` `nts.go.kr` `bok.or.kr` `moef.go.kr` `krx.co.kr` `ftc.go.kr` `kdi.re.kr`
+- 미국: `sec.gov` `ecfr.gov` `uscode.house.gov` `govinfo.gov` `irs.gov` `federalreserve.gov` `treasury.gov` `delaware.gov`
+- EU·영국·일본: `europa.eu` `legislation.gov.uk` `gov.uk` `e-gov.go.jp`
+- 국제기구: `bis.org` `oecd.org`
+- 기준 제정 단체(그 단체가 만든 기준·서식에만): `ifrs.org` `coso.org` `iso.org` `cfainstitute.org` `treasurers.org` `ycombinator.com`
 
 ## 세션 중 확인하는 법
 

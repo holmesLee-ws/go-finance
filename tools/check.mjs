@@ -12,9 +12,15 @@ const read = (p) => readFileSync(join(root, p), "utf8").replace(/\r\n/g, "\n");
 
 const LEVELS = ["Explain", "Apply", "Evaluate", "Develop"];
 const FIELDS = ["선수", "핵심 질문", "목표", "만들어 볼 것", "국내 근거", "글로벌 비교"];
-// 공식 출처 도메인 허용 목록(정본). 하위 도메인 포함.
-const DOMAINS = ["law.go.kr", "fsc.go.kr", "fss.or.kr", "nts.go.kr", "bok.or.kr", "moef.go.kr", "krx.co.kr", "ftc.go.kr", "kdi.re.kr", "kofiu.go.kr", "kfb.or.kr", "kvic.or.kr", "mss.go.kr",
-  "sec.gov", "ecfr.gov", "uscode.house.gov", "govinfo.gov", "congress.gov", "irs.gov", "federalreserve.gov", "cftc.gov", "treasury.gov", "delaware.gov", "eur-lex.europa.eu", "europa.eu", "legislation.gov.uk", "gov.uk", "ofwat.gov.uk", "bis.org", "oecd.org", "ifrs.org", "coso.org", "iso.org", "e-gov.go.jp", "mof.go.jp", "ycombinator.com", "lma.eu.com", "cfainstitute.org", "treasurers.org"];
+// 공식 출처 도메인 허용 목록(정본, sources.md 머리에도 같은 목록). 하위 도메인 포함.
+// 국내: 법령·감독·발행 기관. 글로벌: 입법·감독기관, 국제기구, 그 기준을 만든 기준 제정 기관(IFRS·COSO·ISO·CFA·ACT·SAFE를 만든 YC).
+const DOMAINS = [
+  "law.go.kr", "fsc.go.kr", "fss.or.kr", "nts.go.kr", "bok.or.kr", "moef.go.kr", "krx.co.kr", "ftc.go.kr", "kdi.re.kr",
+  "sec.gov", "ecfr.gov", "uscode.house.gov", "govinfo.gov", "irs.gov", "federalreserve.gov", "treasury.gov", "delaware.gov",
+  "europa.eu", "legislation.gov.uk", "gov.uk", "e-gov.go.jp",
+  "bis.org", "oecd.org",
+  "ifrs.org", "coso.org", "iso.org", "cfainstitute.org", "treasurers.org", "ycombinator.com",
+];
 
 function parseCurriculum(text) {
   const modules = new Map();
@@ -98,7 +104,15 @@ function main() {
   errors.push(...problems);
   errors.push(...checkSources(read("curriculum/sources.md"), refs));
   errors.push(...checkCapstone(xblocks));
-  if (!/`basis`/.test(read("tutor/assessment.md")) || !/experience/.test(read("tutor/assessment.md"))) errors.push("tutor/assessment.md에 basis 정의 없음");
+  const asm = read("tutor/assessment.md");
+  for (const v of ["`experience`", "`framework`", "`both`", "\"basis\""]) if (!asm.includes(v)) errors.push(`tutor/assessment.md에 basis ${v} 정의·예시 없음`);
+  const src = read("curriculum/sources.md");
+  const how = (src.split("## 세션 중 확인하는 법")[1] || "").split("\n## ")[0];
+  if (!how.trim() || /작성\)|\(확인 중\)|TODO/.test(how)) errors.push("sources.md 「세션 중 확인하는 법」이 비었거나 자리표시");
+  const head = (src.split("## 허용 도메인")[1] || "").split("\n## ")[0];
+  const listed = new Set([...head.matchAll(/`([a-z0-9.-]+\.[a-z]{2,})`/g)].map((m) => m[1]));
+  for (const d of DOMAINS) if (!listed.has(d)) errors.push(`sources.md 「허용 도메인」에 ${d} 없음`);
+  for (const d of listed) if (!DOMAINS.includes(d)) errors.push(`sources.md 「허용 도메인」의 ${d}가 check.mjs 목록에 없음`);
   if (modules.size === 0) errors.push("모듈을 찾지 못함");
 
   const files = execFileSync("git", ["ls-files", "--cached", "--others", "--exclude-standard", "-z"], { cwd: root, encoding: "utf8" }).split("\0").filter(Boolean);
